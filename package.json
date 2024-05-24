@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/WildCodeSchool/Express-Quests#readme",
   "dependencies": {
-    "express": "^4.18.2",
+    "express": "^4.19.2",
     "mysql2": "^3.9.7"
   },
   "devDependencies": {
