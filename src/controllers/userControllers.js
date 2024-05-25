@@ -1,7 +1,49 @@
 const database = require("../../database");
 const getUsers = (req, res) => {
+  /* let initialSql = "select * from users";
+  const value = [];
+
+  if (req.query.language != null) {
+    initialSql += " where language = ?";
+    value.push(req.query.language);
+    if (req.query.city != null) {
+      initialSql += " AND city = ?";
+      value.push(req.query.city);
+    }
+  } else if (req.query.city != null) {
+    initialSql += " where city = ?";
+    value.push(req.query.city);
+  }
+
   database
-    .query("select * from users")
+    .query(initialSql, value) */
+
+  const initialSql = "select * from users";
+  const where = [];
+
+  if (req.query.language != null) {
+    where.push({
+      column: "language",
+      value: req.query.language,
+      operator: "=",
+    });
+  }
+  if (req.query.city != null) {
+    where.push({
+      column: "city",
+      value: req.query.city,
+      operator: "=",
+    });
+  }
+  database
+    .query(
+      where.reduce(
+        (sql, { column, operator }, index) =>
+          `${sql} ${index === 0 ? "where" : "AND"} ${column}${operator} ?`,
+        initialSql
+      ),
+      where.map(({ value }) => value)
+    )
     .then(([users]) => {
       res.json(users);
     })
